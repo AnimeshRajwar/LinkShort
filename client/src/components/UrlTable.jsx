@@ -50,7 +50,68 @@ export default function UrlTable({ urls, onDelete, showHeader = true }) {
             No links yet. Shorten your first URL above.
           </div>
         ) : (
-          <div className="overflow-x-auto">
+          <>
+            <div className="md:hidden divide-y divide-slate-100">
+              {urls.map((u) => (
+                <div key={u.shortCode} className="p-4 space-y-3">
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Original</p>
+                    <p className="text-sm text-slate-800 break-all">{u.originalUrl}</p>
+                  </div>
+
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Short URL</p>
+                    <div className="flex items-center gap-2">
+                      <a href={u.shortUrl} target="_blank" rel="noreferrer" className="text-primary text-sm font-bold break-all">
+                        {u.shortUrl.replace(/^https?:\/\//, '')}
+                      </a>
+                      <button
+                        className="text-slate-400 hover:text-primary transition-all"
+                        onClick={() => handleCopy(u.shortUrl, u.shortCode)}
+                      >
+                        <span className="material-symbols-outlined text-base">
+                          {copiedCode === u.shortCode ? 'check' : 'content_copy'}
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <p className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Clicks</p>
+                      <p className="text-sm font-semibold text-slate-800">{u.clicks}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Created</p>
+                      <p className="text-sm text-slate-600">{timeAgo(u.createdAt)}</p>
+                    </div>
+                    <div className="col-span-2">
+                      <p className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Expires</p>
+                      <p className="text-sm text-slate-600">
+                        {u.expiresAt ? new Date(u.expiresAt).toLocaleDateString() : 'Never'}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-end gap-2">
+                    <button className="p-2 text-slate-400 hover:text-primary hover:bg-slate-100 rounded-lg transition-colors">
+                      <span className="material-symbols-outlined text-lg">edit</span>
+                    </button>
+                    <button
+                      className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                      onClick={() => handleDelete(u.shortCode)}
+                      disabled={deletingCode === u.shortCode}
+                    >
+                      <span className="material-symbols-outlined text-lg">
+                        {deletingCode === u.shortCode ? 'hourglass_top' : 'delete'}
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="hidden md:block overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-slate-50">
@@ -119,7 +180,8 @@ export default function UrlTable({ urls, onDelete, showHeader = true }) {
                 ))}
               </tbody>
             </table>
-          </div>
+            </div>
+          </>
         )}
       </div>
     </section>

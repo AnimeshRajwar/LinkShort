@@ -19,8 +19,8 @@ function Dashboard({ urls, loading, onNewUrl, onDelete, onLogout, user, onUserUp
     <div className="bg-background-light font-display text-slate-900 min-h-screen">
       <div className="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
         <div className="layout-container flex h-full grow flex-col">
-          <header className="flex items-center justify-between whitespace-nowrap border-b border-slate-200 bg-white px-6 md:px-10 py-3 sticky top-0 z-50">
-            <div className="flex items-center gap-8">
+          <header className="flex items-center justify-between whitespace-nowrap border-b border-slate-200 bg-white px-4 sm:px-6 md:px-10 py-3 sticky top-0 z-50">
+            <div className="flex items-center gap-4 sm:gap-8">
               <div className="flex items-center gap-2 text-primary">
                 <span className="material-symbols-outlined text-3xl font-bold">link</span>
                 <h2 className="text-slate-900 text-lg font-bold leading-tight tracking-[-0.015em]">LinkShort</h2>
@@ -53,7 +53,7 @@ function Dashboard({ urls, loading, onNewUrl, onDelete, onLogout, user, onUserUp
               </nav>
             </div>
 
-            <div className="flex flex-1 justify-end gap-4 items-center">
+            <div className="flex flex-1 justify-end gap-2 sm:gap-4 items-center">
               <button className="hidden sm:flex items-center justify-center rounded-lg h-10 px-4 bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors text-sm font-semibold" onClick={onLogout}>
                 Log out
               </button>
@@ -66,8 +66,43 @@ function Dashboard({ urls, loading, onNewUrl, onDelete, onLogout, user, onUserUp
             </div>
           </header>
 
-          <main className="flex flex-1 justify-center py-8">
-            <div className="layout-content-container flex flex-col max-w-[1200px] flex-1 px-4 md:px-10 gap-8">
+          <div className="md:hidden border-b border-slate-200 bg-white px-4 py-2 sticky top-[65px] z-40">
+            <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
+              <button
+                className={`shrink-0 px-3 py-2 rounded-lg text-sm font-semibold ${activeTab === 'dashboard' ? 'bg-primary text-white' : 'bg-slate-100 text-slate-600'}`}
+                onClick={() => setActiveTab('dashboard')}
+              >
+                Dashboard
+              </button>
+              <button
+                className={`shrink-0 px-3 py-2 rounded-lg text-sm font-semibold ${activeTab === 'my-links' ? 'bg-primary text-white' : 'bg-slate-100 text-slate-600'}`}
+                onClick={() => setActiveTab('my-links')}
+              >
+                My Links
+              </button>
+              <button
+                className={`shrink-0 px-3 py-2 rounded-lg text-sm font-semibold ${activeTab === 'analytics' ? 'bg-primary text-white' : 'bg-slate-100 text-slate-600'}`}
+                onClick={() => setActiveTab('analytics')}
+              >
+                Analytics
+              </button>
+              <button
+                className={`shrink-0 px-3 py-2 rounded-lg text-sm font-semibold ${activeTab === 'settings' ? 'bg-primary text-white' : 'bg-slate-100 text-slate-600'}`}
+                onClick={() => setActiveTab('settings')}
+              >
+                Settings
+              </button>
+              <button
+                className="shrink-0 px-3 py-2 rounded-lg text-sm font-semibold bg-slate-900 text-white"
+                onClick={onLogout}
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+
+          <main className="flex flex-1 justify-center py-4 sm:py-8">
+            <div className="layout-content-container flex flex-col max-w-[1200px] flex-1 px-3 sm:px-4 md:px-10 gap-6 sm:gap-8">
               {activeTab === 'dashboard' && (
                 <>
               <section className="@container">
