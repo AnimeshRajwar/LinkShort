@@ -8,6 +8,19 @@ A modern, full-stack URL shortener with authentication, analytics, and Redis cac
 
 ---
 
+
+## Workflow Diagrams
+
+### URL Shortening Workflow
+
+![URL Shortening Workflow](docs/images/shorten_workflow.svg)
+
+### Redirection Workflow
+
+![Redirection Workflow](docs/images/redirectworkflow.svg)
+
+---
+
 ## Features
 
 - 🔗 Shorten URLs with Base62 encoding
