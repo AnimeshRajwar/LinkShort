@@ -37,7 +37,7 @@ export default function AnalyticsPage({ urls }) {
 
   return (
     <section className="flex flex-col gap-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
         <h2 className="text-slate-900 text-2xl font-bold">Analytics</h2>
         <p className="text-slate-500 text-sm">Live click intelligence</p>
       </div>
@@ -96,28 +96,45 @@ export default function AnalyticsPage({ urls }) {
         {recentClicks.length === 0 ? (
           <p className="text-slate-500 text-sm">No clicks recorded yet.</p>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="border-b border-slate-100">
-                  <th className="py-2 text-slate-500 text-xs font-bold uppercase">Short Code</th>
-                  <th className="py-2 text-slate-500 text-xs font-bold uppercase">Location</th>
-                  <th className="py-2 text-slate-500 text-xs font-bold uppercase">Referrer</th>
-                  <th className="py-2 text-slate-500 text-xs font-bold uppercase">Time</th>
-                </tr>
-              </thead>
-              <tbody>
-                {recentClicks.map((click, idx) => (
-                  <tr key={`${click.shortCode}-${click.timestamp}-${idx}`} className="border-b border-slate-50">
-                    <td className="py-2 text-sm text-slate-800">{click.shortCode}</td>
-                    <td className="py-2 text-sm text-slate-600">{click.city || 'Unknown'}, {click.country || 'Unknown'}</td>
-                    <td className="py-2 text-sm text-slate-600 truncate max-w-[250px]">{click.referrer || 'Direct'}</td>
-                    <td className="py-2 text-sm text-slate-600">{new Date(click.timestamp).toLocaleString()}</td>
+          <>
+            <div className="md:hidden divide-y divide-slate-100">
+              {recentClicks.map((click, idx) => (
+                <div key={`${click.shortCode}-${click.timestamp}-${idx}`} className="py-3 space-y-2">
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="text-sm font-semibold text-slate-800">{click.shortCode}</span>
+                    <span className="text-xs text-slate-500">{new Date(click.timestamp).toLocaleString()}</span>
+                  </div>
+                  <p className="text-sm text-slate-600 break-words">
+                    {click.city || 'Unknown'}, {click.country || 'Unknown'}
+                  </p>
+                  <p className="text-sm text-slate-600 break-all">{click.referrer || 'Direct'}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="hidden md:block overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="border-b border-slate-100">
+                    <th className="py-2 text-slate-500 text-xs font-bold uppercase">Short Code</th>
+                    <th className="py-2 text-slate-500 text-xs font-bold uppercase">Location</th>
+                    <th className="py-2 text-slate-500 text-xs font-bold uppercase">Referrer</th>
+                    <th className="py-2 text-slate-500 text-xs font-bold uppercase">Time</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {recentClicks.map((click, idx) => (
+                    <tr key={`${click.shortCode}-${click.timestamp}-${idx}`} className="border-b border-slate-50">
+                      <td className="py-2 text-sm text-slate-800">{click.shortCode}</td>
+                      <td className="py-2 text-sm text-slate-600">{click.city || 'Unknown'}, {click.country || 'Unknown'}</td>
+                      <td className="py-2 text-sm text-slate-600 truncate max-w-[250px]">{click.referrer || 'Direct'}</td>
+                      <td className="py-2 text-sm text-slate-600">{new Date(click.timestamp).toLocaleString()}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
       </div>
     </section>
