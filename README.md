@@ -1,20 +1,26 @@
-# ⚡ MERN URL Shortener
+# ⚡ LinkShort - URL Shortener
 
-A full-stack URL shortener built with **MongoDB · Express · React · Node.js**.
+A modern, full-stack URL shortener with authentication, analytics, and Redis caching.
 
 ![Stack](https://img.shields.io/badge/Stack-MERN-6c63ff?style=flat-square)
+![Auth](https://img.shields.io/badge/Auth-Supabase-3ECF8E?style=flat-square)
+![Cache](https://img.shields.io/badge/Cache-Redis-DC382D?style=flat-square)
 
 ---
 
 ## Features
 
-- 🔗 Shorten any URL instantly
-- ✏️ Custom short codes (e.g. `/my-link`)
+- 🔗 Shorten URLs with Base62 encoding
+- 🔐 Authentication powered by Supabase
+- 📊 Real-time analytics dashboard with click tracking
+- 🌍 IP-based geolocation tracking
+- ⚡ Redis caching with SWR (Stale-While-Revalidate) strategy
+- 🔄 Real-time updates with 5-second polling
 - ⏳ Optional link expiration (set in days)
-- 📊 Click tracking with history
-- 🗑️ Delete links
+- 🗑️ Delete links with confirmation
 - 📋 One-click copy to clipboard
-- 📱 Responsive design
+- 📱 Responsive design with tabs navigation
+- 🎯 MongoDB indexes for optimized performance
 
 ---
 
@@ -24,42 +30,45 @@ A full-stack URL shortener built with **MongoDB · Express · React · Node.js**
 url-shortener/
 ├── server/                  # Express + MongoDB API
 │   ├── models/
-│   │   └── Url.js           # Mongoose schema
+│   │   ├── Url.js          # Mongoose schema with indexes
+│   │   └── User.js         # User schema (legacy)
 │   ├── routes/
-│   │   └── url.js           # API routes
-│   ├── index.js             # Server entry point
-│   ├── .env.example         # Environment variables template
+│   │   ├── url.js          # API routes with caching
+│   │   └── auth.js         # Auth routes (legacy)
+│   ├── middleware/
+│   │   └── auth.js         # Supabase JWT verification
+│   ├── utils/
+│   │   └── cache.js        # Redis/Memory cache with SWR
+│   ├── index.js            # Server entry point
+│   ├── .env.example        # Environment variables template
 │   └── package.json
 ├── client/                  # React frontend
 │   ├── src/
 │   │   ├── components/
 │   │   │   ├── ShortenForm.jsx
 │   │   │   ├── UrlTable.jsx
-│   │   │   └── StatsBar.jsx
-│   │   ├── App.jsx
-│   │   ├── api.js
-│   │   ├── index.js
-│   │   └── index.css
-│   └── package.json
-└── package.json             # Root scripts
-```
-
----
-
-## Quick Start
-
-### Prerequisites
-- Node.js 18+
-- MongoDB running locally (or a MongoDB Atlas URI)
+│   │   │   ├── StatsBar.jsx
+│   │   │   ├── AnalyticsPage.jsx
+│   │   │   └── SettingsPage.jsx
+│   │   ├── pages/
+│   │   │   ├── LoginPage.jsx
+│   │   │   ├── SignupPage.jsx
+│   │   │   ├── ForgotPasswordPage.jsx
+│   │   │   └── ResetPasswordPage.jsx
+│   │   ├── lib/
+│   │   │ Atlas account (free tier)
+- Supabase account (free tier)
+- Upstash Redis account (optional, free tier)
 
 ### 1. Clone & Install
 
 ```bash
-# Install all dependencies
+git clone https://github.com/AnimeshRajwar/LinkShort.git
+cd LinkShort
 npm run install:all
 ```
 
-### 2. Configure Environment
+### 2. Configure Backend Environment
 
 ```bash
 cd server
@@ -69,12 +78,31 @@ cp .env.example .env
 Edit `server/.env`:
 ```env
 PORT=5000
-MONGODB_URI=mongodb://localhost:27017/urlshortener
+MONGODB_URI=mongodb+srv://username:<password>@cluster.mongodb.net/urlshortener
 BASE_URL=http://localhost:5000
 CLIENT_URL=http://localhost:3000
+REDIS_URL=rediss://default:<password>@your-redis.upstash.io:6379
 ```
 
-### 3. Run in Development
+### 3. Configure Frontend Environment
+
+```bash
+cd client
+cp .env.example .env
+```
+
+Edit `client/.env`:
+```env
+REACT_APP_SUPABASE_URL=https://your-project.supabase.co
+REACT_APP_SUPABASE_ANON_KEY=your-supabase-anon-key
+```4. Setup Supabase
+
+1. Create a project at [supabase.com](https://supabase.com)
+2. Copy your project URL and anon key to `client/.env`
+3. Enable Email Auth in Supabase Dashboard → Authentication → Providers
+4. Configure email templates for password reset
+
+### 5. Run in Development
 
 ```bash
 # From root — runs both server and client
@@ -84,74 +112,13 @@ npm run dev
 - **Frontend**: http://localhost:3000  
 - **Backend API**: http://localhost:5000
 
----
-
-## API Endpoints
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `POST` | `/api/shorten` | Create a short URL |
-| `GET` | `/api/urls` | List all URLs |
-| `GET` | `/api/stats/:code` | Get stats for a URL |
-| `DELETE` | `/api/urls/:code` | Delete a URL |
-| `GET` | `/:code` | Redirect to original URL |
-
-### POST `/api/shorten`
-
-```json
-{
-  "originalUrl": "https://example.com/very/long/path",
-  "customCode": "my-link",   // optional
-  "expiresIn": "30"          // optional, days
-}
+First-time startup shows:
+- ✅ Redis cache connected (or fallback to memory)
+- ✅ MongoDB connected
+Edit `server/.env`:
+```env
+PORT=5000
+MONGODB_URI=mongodb://localhost:27017/urlshortener
+BASE_URL=http://localhost:5000
+CLIENT_URL=http://localhost:3000
 ```
-
-**Response:**
-```json
-{
-  "shortUrl": "http://localhost:5000/my-link",
-  "shortCode": "my-link",
-  "originalUrl": "https://example.com/very/long/path",
-  "clicks": 0,
-  "createdAt": "2024-01-01T00:00:00.000Z",
-  "expiresAt": "2024-01-31T00:00:00.000Z"
-}
-```
-
----
-
-## Deployment
-
-### Deploy to Production
-
-1. Build the React app:
-   ```bash
-   npm run build
-   ```
-
-2. Serve the build folder from Express (add to `server/index.js`):
-   ```js
-   const path = require('path');
-   app.use(express.static(path.join(__dirname, '../client/build')));
-   app.get('*', (req, res) => res.sendFile(path.join(__dirname, '../client/build/index.html')));
-   ```
-
-3. Set `BASE_URL` to your production domain in `.env`.
-
-### Recommended Platforms
-- **MongoDB**: MongoDB Atlas (free tier)
-- **Backend**: Railway, Render, or Fly.io
-- **Frontend**: Vercel or Netlify (or serve from Express)
-
----
-
-## Tech Stack
-
-| Layer | Tech |
-|-------|------|
-| Database | MongoDB + Mongoose |
-| Backend | Node.js + Express |
-| Frontend | React 18 |
-| HTTP Client | Axios |
-| ID Generation | nanoid |
-| URL Validation | valid-url |
