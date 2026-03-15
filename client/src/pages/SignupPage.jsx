@@ -102,24 +102,6 @@ export default function SignupPage({ onGoToLogin, onSignup }) {
               </button>
             </form>
 
-            <div className="relative my-8">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-slate-200"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-slate-500">Or continue with</span>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <button className="flex items-center justify-center gap-2 py-2.5 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors">
-                <span className="text-sm font-semibold">Google</span>
-              </button>
-              <button className="flex items-center justify-center gap-2 py-2.5 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors">
-                <span className="text-sm font-semibold">GitHub</span>
-              </button>
-            </div>
-
             <div className="mt-8 text-center">
               <p className="text-xs text-slate-500">
                 By signing up, you agree to our{' '}

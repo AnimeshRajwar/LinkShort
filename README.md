@@ -108,7 +108,9 @@ Edit `client/.env`:
 ```env
 REACT_APP_SUPABASE_URL=https://your-project.supabase.co
 REACT_APP_SUPABASE_ANON_KEY=your-supabase-anon-key
-```4. Setup Supabase
+```
+
+### 4. Setup Supabase
 
 1. Create a project at [supabase.com](https://supabase.com)
 2. Copy your project URL and anon key to `client/.env`

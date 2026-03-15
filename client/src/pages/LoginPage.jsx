@@ -92,23 +92,6 @@ export default function LoginPage({ onLogin, onGoToSignup, onGoToForgotPassword 
             </button>
           </form>
 
-          <div className="mt-8 relative">
-            <div aria-hidden="true" className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-slate-200"></div>
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white text-slate-500">Or continue with</span>
-            </div>
-          </div>
-
-          <div className="mt-6 grid grid-cols-2 gap-4">
-            <button className="flex w-full items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors">
-              <span>Google</span>
-            </button>
-            <button className="flex w-full items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors">
-              <span>GitHub</span>
-            </button>
-          </div>
         </div>
 
         <p className="mt-8 text-center text-sm text-slate-600">
